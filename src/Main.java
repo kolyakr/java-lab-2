@@ -2,6 +2,7 @@
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        System.out.println("start");
+        Patient a = new Patient(123, "Bond", "Jack", "Peter", "234-343-543", 34, "cold");
+        System.out.println(a.toString());
     }
 }
