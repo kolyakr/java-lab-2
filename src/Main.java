@@ -4,21 +4,24 @@ public class Main {
 
     public static void main(String[] args) {
         Patient[] patients = new Patient[10];
-        patients[0] = new Patient(1, "Smith", "John", "William", "555-1234", 1001, "Flu");
-        patients[1] = new Patient(2, "Doe", "Jane", "Elizabeth", "555-5678", 1002, "Cold");
+        patients[0] = new Patient(1, "Smith", "John", "William", "455-1234", 1001, "Flu");
+        patients[1] = new Patient(2, "Doe", "Jane", "Elizabeth", "255-5678", 1002, "Cold");
         patients[2] = new Patient(3, "Johnson", "Emily", "Rose", "555-8765", 1003, "Headache");
-        patients[3] = new Patient(4, "Williams", "Michael", "James", "555-4321", 1004, "Fever");
+        patients[3] = new Patient(4, "Williams", "Michael", "James", "755-4321", 1004, "Fever");
         patients[4] = new Patient(5, "Jones", "Olivia", "Grace", "555-6789", 1005, "Cough");
         patients[5] = new Patient(6, "Brown", "Liam", "Noah", "555-3456", 1006, "Cold");
         patients[6] = new Patient(7, "Davis", "Ava", "Mia", "555-7890", 1007, "Stomachache");
-        patients[7] = new Patient(8, "Miller", "Sophia", "Isabella", "555-2345", 1008, "Back Pain");
-        patients[8] = new Patient(9, "Wilson", "Ethan", "Alexander", "555-6780", 1009, "Cold");
-        patients[9] = new Patient(10, "Moore", "Charlotte", "Amelia", "555-9012", 1010, "Nausea");
+        patients[7] = new Patient(8, "Miller", "Sophia", "Isabella", "255-2345", 1008, "Back Pain");
+        patients[8] = new Patient(9, "Wilson", "Ethan", "Alexander", "255-6780", 1009, "Cold");
+        patients[9] = new Patient(10, "Moore", "Charlotte", "Amelia", "455-9012", 1010, "Nausea");
 
         /*ArrayList<Patient> patientsWithCold  = getPatientsByDiagnosis(patients, "Cold");
         printPatients(patientsWithCold);*/
-        ArrayList<Patient> patientsByMedCard = getPatientsByMedCard(patients, 1003, 1007);
-        printPatients(patientsByMedCard);
+        /*ArrayList<Patient> patientsByMedCard = getPatientsByMedCard(patients, 1003, 1007);
+        printPatients(patientsByMedCard);*/
+        byte firstNumber = 5;
+        ArrayList<Patient> patientsByPhoneNum = getPatientsByFirstPhoneNumDigit(patients, firstNumber);
+        printPatients(patientsByPhoneNum);
     }
 
     /**
@@ -59,6 +62,26 @@ public class Main {
         return patientsByMedCard;
     }
 
+    public static ArrayList<Patient> getPatientsByFirstPhoneNumDigit(Patient[] patients, byte firstNumber){
+        if(patients.length == 0 || firstNumber < 0 || firstNumber > 9){
+            return null;
+        }
+
+        ArrayList<Patient> patientsByPhoneNum = new ArrayList<Patient>();
+        int number = 0;
+
+        for(Patient patient: patients){
+            String phoneNumber = patient.getPhoneNumber();
+            if((phoneNumber.charAt(0) - '0') == firstNumber){
+                patientsByPhoneNum.add(patient);
+                number++;
+            }
+        }
+
+        System.out.println("Number of patients with the same first number in phone number: " + number);
+        return patientsByPhoneNum;
+    }
+
     /**
      * prints patients
      * @param patients dynamic array list of patients
@@ -66,7 +89,7 @@ public class Main {
 
     public static void printPatients(ArrayList<Patient> patients){
         if(patients == null){
-            System.out.println("List are empty.");
+            System.out.println("List is empty.");
             return;
         }
         int number = 1;
