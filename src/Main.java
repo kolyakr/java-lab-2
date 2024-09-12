@@ -15,8 +15,10 @@ public class Main {
         patients[8] = new Patient(9, "Wilson", "Ethan", "Alexander", "555-6780", 1009, "Cold");
         patients[9] = new Patient(10, "Moore", "Charlotte", "Amelia", "555-9012", 1010, "Nausea");
 
-        ArrayList<Patient> patientsWithCold  = getPatientsByDiagnosis(patients, "Cold");
-        printPatients(patientsWithCold);
+        /*ArrayList<Patient> patientsWithCold  = getPatientsByDiagnosis(patients, "Cold");
+        printPatients(patientsWithCold);*/
+        ArrayList<Patient> patientsByMedCard = getPatientsByMedCard(patients, 1003, 1007);
+        printPatients(patientsByMedCard);
     }
 
     /**
@@ -41,14 +43,37 @@ public class Main {
         return specificPatients;
     }
 
+    public static ArrayList<Patient> getPatientsByMedCard(Patient[] patients, int start, int end){
+        if(patients.length == 0 || start > end){
+            return null;
+        }
+
+        ArrayList<Patient> patientsByMedCard = new ArrayList<Patient>();
+        for(Patient patient: patients){
+            int medCardNum = patient.getMedicalCardNum();
+            if(medCardNum >= start && medCardNum <= end){
+                patientsByMedCard.add(patient);
+            }
+        }
+
+        return patientsByMedCard;
+    }
+
     /**
      * prints patients
      * @param patients dynamic array list of patients
      */
 
     public static void printPatients(ArrayList<Patient> patients){
+        if(patients == null){
+            System.out.println("List are empty.");
+            return;
+        }
+        int number = 1;
         for(Patient patient: patients){
+            System.out.println(number + ".");
             System.out.println(patient.toString());
+            number++;
         }
     }
 }
