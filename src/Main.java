@@ -1,42 +1,87 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-        Patient[] patients = new Patient[10];
-        patients[0] = new Patient(1, "Smith", "John", "William", "455-1234", 1001, "Flu");
-        patients[1] = new Patient(2, "Doe", "Jane", "Elizabeth", "255-5678", 1002, "Cold");
-        patients[2] = new Patient(3, "Johnson", "Emily", "Rose", "555-8765", 1003, "Headache");
-        patients[3] = new Patient(4, "Williams", "Michael", "James", "755-4321", 1004, "Fever");
-        patients[4] = new Patient(5, "Jones", "Olivia", "Grace", "555-6789", 1005, "Cough");
-        patients[5] = new Patient(6, "Brown", "Liam", "Noah", "555-3456", 1006, "Cold");
-        patients[6] = new Patient(7, "Davis", "Ava", "Mia", "555-7890", 1007, "Stomachache");
-        patients[7] = new Patient(8, "Miller", "Sophia", "Isabella", "255-2345", 1008, "Back Pain");
-        patients[8] = new Patient(9, "Wilson", "Ethan", "Alexander", "255-6780", 1009, "Cold");
-        patients[9] = new Patient(10, "Moore", "Charlotte", "Amelia", "455-9012", 1010, "Nausea");
+        Scanner scanner = new Scanner(System.in);
 
-        /*ArrayList<Patient> patientsWithCold  = getPatientsByDiagnosis(patients, "Cold");
-        printPatients(patientsWithCold);*/
-        /*ArrayList<Patient> patientsByMedCard = getPatientsByMedCard(patients, 1003, 1007);
-        printPatients(patientsByMedCard);*/
-        byte firstNumber = 5;
+        int numPatients = 0;
+        while (true) {
+            System.out.print("Enter the number of patients: ");
+            try {
+                numPatients = scanner.nextInt();
+                if (numPatients <= 0) {
+                    System.out.println("Number of patients must be positive.");
+                } else {
+                    break;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter an integer.");
+                scanner.next(); // Clear the invalid input
+            }
+        }
+
+        Patient[] patients = new Patient[numPatients];
+
+        for (int i = 0; i < patients.length; i++) {
+            System.out.println("Enter details for patient " + (i + 1) + ":");
+            int id = readInt(scanner, "ID: ");
+            scanner.nextLine(); // Consume the newline
+            String lastName = readString(scanner, "Last Name: ");
+            String firstName = readString(scanner, "First Name: ");
+            String middleName = readString(scanner, "Middle Name: ");
+            String phoneNumber = readString(scanner, "Phone Number: ");
+            int medCardNum = readInt(scanner, "Medical Card Number: ");
+            String diagnosis = readString(scanner, "Diagnosis: ");
+
+            patients[i] = new Patient(id, lastName, firstName, middleName, phoneNumber, medCardNum, diagnosis);
+        }
+
+        System.out.println("\nEnter the first digit of phone number to filter: ");
+        byte firstNumber = readByte(scanner, "First Digit: ");
         ArrayList<Patient> patientsByPhoneNum = getPatientsByFirstPhoneNumDigit(patients, firstNumber);
         printPatients(patientsByPhoneNum);
+
+        scanner.close();
     }
 
-    /**
-     * This function search patients with the same diagnosis ad in parameters
-     * @param patients array of Patient objects
-     * @param diagnosis name of diagnosis
-     * @return dynamic array list of patients with the same diagnosis
-     */
+    private static int readInt(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                return scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter an integer.");
+                scanner.next(); // Clear the invalid input
+            }
+        }
+    }
+
+    private static byte readByte(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                return scanner.nextByte();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a byte.");
+                scanner.next(); // Clear the invalid input
+            }
+        }
+    }
+
+    private static String readString(Scanner scanner, String prompt) {
+        System.out.print(prompt);
+        return scanner.nextLine();
+    }
 
     public static ArrayList<Patient> getPatientsByDiagnosis(Patient[] patients, String diagnosis){
         if(patients.length == 0){
             return null;
         }
 
-        ArrayList<Patient> specificPatients = new ArrayList<Patient>();
+        ArrayList<Patient> specificPatients = new ArrayList<>();
         for(Patient patient: patients){
             if(diagnosis.equals(patient.getDiagnosis())){
                 specificPatients.add(patient);
@@ -51,7 +96,7 @@ public class Main {
             return null;
         }
 
-        ArrayList<Patient> patientsByMedCard = new ArrayList<Patient>();
+        ArrayList<Patient> patientsByMedCard = new ArrayList<>();
         for(Patient patient: patients){
             int medCardNum = patient.getMedicalCardNum();
             if(medCardNum >= start && medCardNum <= end){
@@ -67,7 +112,7 @@ public class Main {
             return null;
         }
 
-        ArrayList<Patient> patientsByPhoneNum = new ArrayList<Patient>();
+        ArrayList<Patient> patientsByPhoneNum = new ArrayList<>();
         int number = 0;
 
         for(Patient patient: patients){
@@ -82,13 +127,8 @@ public class Main {
         return patientsByPhoneNum;
     }
 
-    /**
-     * prints patients
-     * @param patients dynamic array list of patients
-     */
-
     public static void printPatients(ArrayList<Patient> patients){
-        if(patients == null){
+        if(patients == null || patients.isEmpty()){
             System.out.println("List is empty.");
             return;
         }
@@ -100,17 +140,3 @@ public class Main {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
